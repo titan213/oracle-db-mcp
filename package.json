@@ -1,0 +1,55 @@
+{
+  "name": "oracle-db-mcp",
+  "version": "1.0.0",
+  "description": "MCP Server for Oracle Database connectivity - Connect, query, and manage Oracle databases through AI tools",
+  "author": "Gihan Sundarapperuma <gihan213@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "oracle-db-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "config/*.example.json"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "prepublishOnly": "npm run build",
+    "clean": "rimraf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "mcp",
+    "oracle",
+    "database",
+    "ai",
+    "cursor",
+    "claude",
+    "model-context-protocol"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gihan213/oracle-db-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gihan213/oracle-db-mcp/issues"
+  },
+  "homepage": "https://github.com/gihan213/oracle-db-mcp#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "oracledb": "^6.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "rimraf": "^5.0.5",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
+  }
+}
+

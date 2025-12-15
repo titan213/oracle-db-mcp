@@ -1,0 +1,49 @@
+{
+  "oracleClient": {
+    "mode": "thin",
+    "path": null
+  },
+  "settings": {
+    "defaultMaxRows": 100,
+    "queryTimeout": 30
+  },
+  "connections": [
+    {
+      "name": "dev",
+      "host": "dev-server.company.com",
+      "port": 1521,
+      "serviceName": "DEVDB",
+      "username": "dev_user",
+      "password": "dev_password",
+      "mode": "readwrite"
+    },
+    {
+      "name": "prod",
+      "host": "prod-server.company.com",
+      "port": 1521,
+      "serviceName": "PRODDB",
+      "username": "report_user",
+      "password": "prod_password",
+      "mode": "readonly"
+    },
+    {
+      "_comment": "Example: Using SID instead of service name",
+      "name": "legacy",
+      "host": "legacy-server",
+      "port": 1521,
+      "sid": "ORCL",
+      "username": "app_user",
+      "passwordEnv": "LEGACY_DB_PASSWORD",
+      "mode": "readonly"
+    },
+    {
+      "_comment": "Example: Using connection string",
+      "name": "local",
+      "connectionString": "localhost:1521/XEPDB1",
+      "username": "system",
+      "password": "oracle",
+      "mode": "readwrite"
+    }
+  ]
+}
+

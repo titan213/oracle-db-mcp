@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "oracle-db": {
+      "command": "npx",
+      "args": ["-y", "oracle-db-mcp"],
+      "env": {
+        "ORACLE_MCP_CONFIG": "/path/to/your/connections.json"
+      }
+    }
+  }
+}
+

@@ -1,0 +1,26 @@
+# Source files (we publish dist/)
+src/
+tsconfig.json
+
+# Development
+.git/
+.gitignore
+.vscode/
+.idea/
+
+# Tests
+*.test.ts
+*.spec.ts
+coverage/
+.nyc_output/
+
+# Configuration examples are included
+# config/connections.json is excluded by .gitignore
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
