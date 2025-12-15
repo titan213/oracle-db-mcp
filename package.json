@@ -32,12 +32,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gihan213/oracle-db-mcp.git"
+    "url": "git+https://github.com/titan213/oracle-db-mcp.git"
   },
   "bugs": {
-    "url": "https://github.com/gihan213/oracle-db-mcp/issues"
+    "url": "https://github.com/titan213/oracle-db-mcp/issues"
   },
-  "homepage": "https://github.com/gihan213/oracle-db-mcp#readme",
+  "homepage": "https://github.com/titan213/oracle-db-mcp#readme",
   "engines": {
     "node": ">=18.0.0"
   },

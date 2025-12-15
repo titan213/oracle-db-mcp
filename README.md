@@ -238,7 +238,7 @@ Required for:
 ### Building from Source
 
 ```bash
-git clone https://github.com/gihan213/oracle-db-mcp
+git clone https://github.com/titan213/oracle-db-mcp
 cd oracle-db-mcp
 npm install
 npm run build
