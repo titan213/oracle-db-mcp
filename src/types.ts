@@ -41,6 +41,8 @@ export interface ConnectionConfig {
   name: string;
   username: string;
   mode: ConnectionMode;
+  // Optional privilege for privileged connects (SYSDBA, SYSOPER)
+  privilege?: 'SYSDBA' | 'SYSOPER';
   // Connection details - either use host/port/service or connectionString
   host?: string;
   port?: number;
@@ -57,6 +59,8 @@ export interface ServerConfig {
   oracleClientPath?: string;
   defaultMaxRows: number;
   queryTimeout: number;
+  // Server-level opt-in to allow privileged connects
+  allowSysdba?: boolean;
   connections: ConnectionConfig[];
 }
 
