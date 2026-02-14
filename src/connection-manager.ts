@@ -80,6 +80,8 @@ export function loadConfigFromEnv(): ServerConfig {
     defaultMaxRows: parseInt(process.env.DEFAULT_MAX_ROWS || '100', 10),
     queryTimeout: parseInt(process.env.QUERY_TIMEOUT || '30', 10),
     connections: [],
+    // server-level opt-in for privileged connects
+    allowSysdba: false,
   };
 
   // Check for single connection from env vars
@@ -93,6 +95,7 @@ export function loadConfigFromEnv(): ServerConfig {
       serviceName: process.env.ORACLE_SERVICE,
       username: process.env.ORACLE_USER || '',
       password: process.env.ORACLE_PASSWORD,
+        privilege: process.env.ORACLE_PRIVILEGE ? process.env.ORACLE_PRIVILEGE.toUpperCase() as any : undefined,
       mode: modeStr === 'readwrite' ? ConnectionMode.READWRITE : ConnectionMode.READONLY,
     });
   }
@@ -116,6 +119,11 @@ export function parseConfig(rawConfig: Record<string, unknown>): ServerConfig {
     defaultMaxRows: (settings.default_max_rows as number) || (settings.defaultMaxRows as number) || 100,
     queryTimeout: (settings.query_timeout as number) || (settings.queryTimeout as number) || 30,
     connections: [],
+    allowSysdba:
+      (rawConfig.allow_sysdba as boolean) ||
+      (rawConfig.allowSysdba as boolean) ||
+      (settings.allow_sysdba as boolean) ||
+      (settings.allowSysdba as boolean) || false,
   };
 
   // Parse connections
@@ -133,6 +141,9 @@ export function parseConfig(rawConfig: Record<string, unknown>): ServerConfig {
       username: (connData.username as string) || '',
       password: connData.password as string | undefined,
       passwordEnv: (connData.password_env || connData.passwordEnv) as string | undefined,
+      privilege: ((connData.privilege as string) || (connData.privilege as string) || undefined)
+        ? (( (connData.privilege as string) || (connData.privilege as string) )!.toUpperCase() as any)
+        : undefined,
       mode: modeStr === 'readwrite' ? ConnectionMode.READWRITE : ConnectionMode.READONLY,
     });
   }
@@ -239,11 +250,39 @@ export class ConnectionManager {
 
     console.error(`Connecting to '${name}' (${getDsn(config)})`);
 
-    const connection = await oracledb.getConnection({
+    const connOpts: Record<string, unknown> = {
       user: config.username,
       password: getPassword(config),
       connectString: getDsn(config),
-    });
+    };
+
+    // Handle privileged connects (SYSDBA / SYSOPER) if configured
+    if (config.privilege) {
+      const serverAllows = !!this.config.allowSysdba;
+      if (!serverAllows) {
+        throw new Error(
+          `Connection '${name}' requests privileged connect (${config.privilege}) but server ` +
+            `is not configured to allow privileged connects. Set server option 'allowSysdba' or ORACLE_ALLOW_SYSDBA=true to enable.`
+        );
+      }
+
+      const p = String(config.privilege).toUpperCase();
+      if (p === 'SYSDBA') {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore - oracledb exposes SYSDBA constant
+        connOpts.privilege = (oracledb as any).SYSDBA;
+      } else if (p === 'SYSOPER') {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        connOpts.privilege = (oracledb as any).SYSOPER;
+      } else {
+        throw new Error(`Unknown privilege '${config.privilege}' for connection '${name}'`);
+      }
+
+      console.error(`Attempting privileged connect for '${name}' as ${p}`);
+    }
+
+    const connection = await oracledb.getConnection(connOpts as any);
 
     // Set session to read-only if configured
     if (config.mode === ConnectionMode.READONLY) {

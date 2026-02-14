@@ -3,6 +3,7 @@
     "mode": "thin",
     "path": null
   },
+  "allowSysdba": false,
   "settings": {
     "defaultMaxRows": 100,
     "queryTimeout": 30
@@ -42,6 +43,18 @@
       "connectionString": "localhost:1521/XEPDB1",
       "username": "system",
       "password": "oracle",
+      "mode": "readwrite"
+    }
+    ,
+    {
+      "_comment": "Example: Privileged SYSDBA connection (requires server opt-in)",
+      "name": "sys",
+      "host": "db-server",
+      "port": 1521,
+      "serviceName": "ORCL",
+      "username": "sys",
+      "passwordEnv": "SYSDBA_PASSWORD",
+      "privilege": "SYSDBA",
       "mode": "readwrite"
     }
   ]

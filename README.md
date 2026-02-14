@@ -90,6 +90,7 @@ Each connection supports:
 | `password` | Database password (direct) |
 | `passwordEnv` | Environment variable containing password |
 | `mode` | `readonly` or `readwrite` |
+| `privilege` | Optional privileged connect: `SYSDBA` or `SYSOPER` (requires server opt-in) |
 
 ### Configuration File Locations
 
@@ -112,6 +113,10 @@ export ORACLE_SERVICE=XEPDB1
 export ORACLE_USER=scott
 export ORACLE_PASSWORD=tiger
 export ORACLE_MODE=readonly
+# Opt-in to allow privileged connects (SYSDBA/SYSOPER). Default: false
+export ORACLE_ALLOW_SYSDBA=false
+# For privileged connection (if enabled):
+export ORACLE_PRIVILEGE=SYSDBA
 ```
 
 ## MCP Client Configuration
